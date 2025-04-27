@@ -1,14 +1,19 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
 //setting app
-app.set('port', 3001);
+app.set('port', 3000);
 
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //routes
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.get('/user', (req, res) => {
     res.send({
     "id": "0001",
