@@ -1,45 +1,92 @@
 const express = require('express');
-const https = require('https');
-const fs = require('fs');
 const path = require('path');
+const { createTransaction, commitTransaction } = require('./transbank.js');
 const app = express();
 
-//setting app
 app.set('port', 3001);
 
-//middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, '../formulario')));
 
-//routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '../formulario/index.html'));
 });
 
-app.get('/user', (req, res) => {
-    res.send({
-    "id": "0001",
-    "name": "name",
-    "fono": "fono",
-    "edad": "edad",
-    "email": "email"
-    });
+app.post('/user', async (req, res) => {
+    try {
+        const { nombre, telefono, edad, email, caso, monto } = req.body;
+        
+        if (!monto) {
+            throw new Error('El monto es requerido');
+        }
+
+        const ordenCompra = generateOrderId();
+        const returnUrl = `${req.protocol}://${req.get('host')}/confirmar-transaccion`.trim();
+        
+        console.log('Iniciando transacción con:', {
+            monto,
+            ordenCompra,
+            returnUrl
+        });
+
+        const transaction = await createTransaction(
+            parseInt(monto),
+            ordenCompra,
+            returnUrl
+        );
+
+        console.log('Transacción creada:', transaction);
+
+        res.json({
+            status: "success",
+            url: transaction.url.trim(),
+            token: transaction.token
+        });
+    } catch (error) {
+        console.error('Error detallado:', error);
+        res.status(500).json({
+            status: "error",
+            message: "Error al procesar la transacción: " + error.message
+        });
+    }
 });
 
-app.get('/hola', (req, res) => {
-    res.send("Hola a todos!");
+app.get('/confirmar-transaccion', async (req, res) => {
+    try {
+        const { token_ws } = req.query;
+        
+        if (!token_ws) {
+            return res.redirect('/fracaso');
+        }
+
+        const commitResponse = await commitTransaction(token_ws);
+        
+        if (commitResponse.status === 'AUTHORIZED') {
+            res.redirect('/exito');
+        } else {
+            res.redirect('/fracaso');
+        }
+    } catch (error) {
+        console.error('Error al confirmar transacción:', error);
+        res.redirect('/fracaso');
+    }
 });
 
-//levantando el servicio HTTP
+app.get('/exito', (req, res) => {
+    res.sendFile(path.join(__dirname, '../formulario/exito.html'));
+});
+
+app.get('/fracaso', (req, res) => {
+    res.sendFile(path.join(__dirname, '../formulario/fracaso.html'));
+});
+
 app.listen(app.get('port'), () => {
-    console.log(`Servidor iniciado! ${app.get('port')}`);
+    console.log(`Server running on port ${app.get('port')}`);
 });
 
-const sslServer = https.createServer(
-    {
-        key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
-        cert:fs.readFileSync(path.join(__dirname,'cert','cert.pem')),
-    },
-);
-
-sslServer.listen(app.get('port'),()=>console.log(`Servidor iniciado! ${app.get('port')}`));
+function generateOrderId() {
+    const timestamp = Date.now().toString().slice(-8);
+    const random = Math.random().toString(36).substring(2, 6);
+    return `OC${timestamp}${random}`;
+}

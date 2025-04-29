@@ -4,40 +4,96 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles.css">
-<title>Abogados</title>
-</head>
-<body>
-<div class="container">
-    <h1 class="titulo1">Bienvenido a Justicia AIEP</h1>
-    <p>¿Necesitas ayuda en tu caso? ¿Cotizar si tu bolsillo aguanta un servicio de abogados?</p>
-    <h2 class="titulo-formulario">Agenda tu cita</h2>
-    <form action="futura-bdd.html" method="post">
-    <div class="form-group">
-        <label for="nombre">Nombre completo:</label>
-        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej:Ervin Naour">
+        <title>Abogados</title>
+    </head>
+    <body>
+    <div class="container">
+        <h1 class="titulo1">Bienvenido a Justicia AIEP</h1>
+        <p>¿Necesitas ayuda en tu caso? ¿Cotizar si tu bolsillo aguanta un servicio de abogados?</p>
+        <h2 class="titulo-formulario">Agenda tu cita</h2>
+        <form action="/user" method="post" id="contactForm">
+        <div class="form-group">
+            <label for="nombre">Nombre completo:</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej:Ervin Naour">
+        </div>
+        <div class="form-group">
+            <label for="telefono">Número de teléfono:</label>
+            <input type="number" id="telefono" name="telefono" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="caso">Cuéntanos tu caso:</label>
+            <textarea id="caso" name="caso" class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="monto">Monto a pagar:</label>
+            <input type="number" id="monto" name="monto" class="form-control" required>
+        </div>
+        <div class="BOTON">
+            <button type="submit" class="button">Pagar con Webpay</button> <br>
+            <a class="cotizacion" href="cotizacion.html">Ver Cotizaciones</a>
+        </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="telefono">Número de teléfono:</label>
-        <input type="number" id="telefono" name="telefono" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad" name="edad" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="caso">Cuéntanos tu caso:</label>
-        <textarea id="caso" name="caso" class="form-control" rows="3" required></textarea>
-    </div>
-    <div class="BOTON">
-        <button type="button" class="button">Enviar</button> <br>
-        <a class="cotizacion" href="cotizacion.html">Ver Cotizaciones</a>
-        <!-- //onclick acción ventana emergente junto con el script de abajo -->
-    </div>
-    </form>
-</div>
-</body>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                telefono: document.getElementById('telefono').value,
+                edad: document.getElementById('edad').value,
+                email: document.getElementById('email').value,
+                caso: document.getElementById('caso').value,
+                monto: document.getElementById('monto').value
+            };
+    
+            try {
+                const response = await fetch('/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+    
+                const data = await response.json();
+                
+                if(response.ok && data.status === "success" && data.url) {
+                    // Limpiar la URL y redirigir
+                    const cleanUrl = data.url.replace(/[`\s]/g, '');
+                    console.log('Redirigiendo a Webpay:', cleanUrl);
+                    
+                    // Usar form para POST en lugar de redirección directa
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = cleanUrl;
+                    
+                    // Agregar token como campo oculto
+                    const tokenInput = document.createElement('input');
+                    tokenInput.type = 'hidden';
+                    tokenInput.name = 'token_ws';
+                    tokenInput.value = data.token;
+                    form.appendChild(tokenInput);
+                    
+                    document.body.appendChild(form);
+                    form.submit();
+                } else {
+                    alert('Error al procesar el pago: ' + (data.message || 'Error desconocido'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al procesar la solicitud');
+            }
+        });
+    </script>
+    </body>
 </html>
