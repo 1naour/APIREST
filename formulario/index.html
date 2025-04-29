@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="styles.css">
+<title>Abogados</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="titulo1">Bienvenido a Justicia AIEP</h1>
+    <p>¿Necesitas ayuda en tu caso? ¿Cotizar si tu bolsillo aguanta un servicio de abogados?</p>
+    <h2 class="titulo-formulario">Agenda tu cita</h2>
+    <form action="conexión" method="post">
+    <div class="form-group">
+        <label for="nombre">Nombre completo:</label>
+        <input type="text" id="nombre" name="nombre" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="telefono">Número de teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="caso">Cuéntanos tu caso:</label>
+        <textarea id="caso" name="caso" class="form-control" rows="3" required></textarea>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+        <a href="caso.html" target="_blank" class="btn btn-success">Cotiza tu caso</a>
+    </div>
+    </form>
+</div>
+</body>
+</html>
