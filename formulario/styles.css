@@ -1,87 +1,159 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+    --background-color: #f5f6fa;
+    --text-color: #2c3e50;
+    --border-color: #dcdde1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
 .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 30px;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-.titulo1 {
+.form-header {
     text-align: center;
-    color: #ff0000;
-    font-size: 42px;
-    font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
 }
 
-p {
-    text-align: center;
-    font-weight: bold;
-    font-size: 24px;
-    margin-bottom: 30px;
+.form-header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
 }
 
-.titulo-formulario {
-    text-align: center;
-    color: red;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
-.form-control {
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.half {
+    flex: 1;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+input, select, textarea {
     width: 100%;
-    padding: 10px 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
 }
 
-.text-center {
-    text-align: center;
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
-    text-decoration: none;
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.submit-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
     cursor: pointer;
-    margin: 0 10px;
+    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
-.btn-primary {
-    background-color: #4CAF50;
-    color: white;
-    font-weight: bold;
-    border: none;
+.submit-btn:hover {
+    background-color: #2980b9;
 }
 
-.btn-success {
-    background-color: #ff0000;
-    font-weight: bold;
-    color: white;
-    border: none;
+.required-fields {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
 }
-body {
-    background-image: url('https://wallpapersok.com/images/hd/monochrome-lawyer-scales-ouqsj5h0cf9421u8.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
+
+.error {
+    border-color: var(--error-color) !important;
+}
+
+.form-footer {
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form-header h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .container {
-    position: relative;
-    z-index: 1;
-    background-color: rgba(255, 255, 255, 0.5);
-    padding: 40px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Estilos para el select */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+/* Estilos para placeholder */
+::placeholder {
+    color: #95a5a6;
+    opacity: 0.7;
 }

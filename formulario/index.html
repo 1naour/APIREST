@@ -1,99 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
-        <title>Abogados</title>
-    </head>
-    <body>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Legal - Estudio Jurídico</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
     <div class="container">
-        <h1 class="titulo1">Bienvenido a Justicia AIEP</h1>
-        <p>¿Necesitas ayuda en tu caso? ¿Cotizar si tu bolsillo aguanta un servicio de abogados?</p>
-        <h2 class="titulo-formulario">Agenda tu cita</h2>
-        <form action="/user" method="post" id="contactForm">
-        <div class="form-group">
-            <label for="nombre">Nombre completo:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej:Ervin Naour">
-        </div>
-        <div class="form-group">
-            <label for="telefono">Número de teléfono:</label>
-            <input type="number" id="telefono" name="telefono" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="edad">Edad:</label>
-            <input type="number" id="edad" name="edad" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="caso">Cuéntanos tu caso:</label>
-            <textarea id="caso" name="caso" class="form-control" rows="3" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="monto">Monto a pagar:</label>
-            <input type="number" id="monto" name="monto" class="form-control" required>
-        </div>
-        <div class="BOTON">
-            <button type="submit" class="button">Pagar con Webpay</button> <br>
-            <a class="cotizacion" href="cotizacion.html">Ver Cotizaciones</a>
-        </div>
+        <header class="form-header">
+            <h1>Consulta Legal</h1>
+            <p class="subtitle">Reserve su consulta con nuestros abogados especialistas</p>
+            <p class="info-text">El valor de la consulta incluye una sesión de 45 minutos con un abogado especialista en su área de interés</p>
+        </header>
+
+        <form id="consultaForm" action="/user" method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre Completo *</label>
+                <input type="text" id="nombre" name="nombre" required 
+                       placeholder="Como aparece en su documento de identidad">
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono de Contacto *</label>
+                <input type="tel" id="telefono" name="telefono" required 
+                       placeholder="+56 9 XXXX XXXX"
+                       pattern="[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}">
+                <small class="help-text">Nos comunicaremos para confirmar su horario de consulta</small>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="edad">Edad *</label>
+                    <input type="number" id="edad" name="edad" required min="18" max="120">
+                    <small class="help-text">Debe ser mayor de 18 años</small>
+                </div>
+                <div class="form-group half">
+                    <label for="email">Correo Electrónico *</label>
+                    <input type="email" id="email" name="email" required 
+                           placeholder="ejemplo@correo.com">
+                    <small class="help-text">Recibirá la confirmación de su consulta</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tipo_caso">Área Legal de Consulta *</label>
+                <select id="tipo_caso" name="caso" required>
+                    <option value="">Seleccione el área legal</option>
+                    <option value="familiar">Derecho Familiar (Divorcios, Pensiones, Custodia)</option>
+                    <option value="laboral">Derecho Laboral (Despidos, Contratos, Accidentes)</option>
+                    <option value="civil">Derecho Civil (Contratos, Propiedades, Herencias)</option>
+                    <option value="penal">Derecho Penal (Defensa Criminal, Querellas)</option>
+                    <option value="comercial">Derecho Comercial (Empresas, Sociedades)</option>
+                </select>
+                <small class="help-text">Le asignaremos un especialista en el área seleccionada</small>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Breve Descripción del Caso *</label>
+                <textarea id="descripcion" name="descripcion" required
+                          placeholder="Describa los puntos principales de su consulta para que nuestro abogado pueda prepararse"></textarea>
+                <small class="help-text">Esta información es confidencial y nos ayuda a preparar mejor su consulta</small>
+            </div>
+
+            <div class="form-group">
+                <label for="monto">Valor de la Consulta *</label>
+                <input type="number" id="monto" name="monto" required min="30000" value="30000" readonly>
+                <small class="help-text">Valor fijo por consulta de 45 minutos con abogado especialista</small>
+            </div>
+
+            <div class="form-footer">
+                <p class="required-fields">* Campos obligatorios</p>
+                <p class="privacy-notice">Sus datos están protegidos por la ley de protección de datos personales</p>
+                <button type="submit" class="submit-btn">Agendar y Pagar Consulta</button>
+            </div>
         </form>
     </div>
 
     <script>
-        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+        document.getElementById('consultaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const formData = {
-                nombre: document.getElementById('nombre').value,
-                telefono: document.getElementById('telefono').value,
-                edad: document.getElementById('edad').value,
-                email: document.getElementById('email').value,
-                caso: document.getElementById('caso').value,
-                monto: document.getElementById('monto').value
-            };
-    
-            try {
-                const response = await fetch('/user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-    
-                const data = await response.json();
-                
-                if(response.ok && data.status === "success" && data.url) {
-                    // Limpiar la URL y redirigir
-                    const cleanUrl = data.url.replace(/[`\s]/g, '');
-                    console.log('Redirigiendo a Webpay:', cleanUrl);
-                    
-                    // Usar form para POST en lugar de redirección directa
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = cleanUrl;
-                    
-                    // Agregar token como campo oculto
-                    const tokenInput = document.createElement('input');
-                    tokenInput.type = 'hidden';
-                    tokenInput.name = 'token_ws';
-                    tokenInput.value = data.token;
-                    form.appendChild(tokenInput);
-                    
-                    document.body.appendChild(form);
-                    form.submit();
+            // Validación básica de campos requeridos
+            const campos = ['nombre', 'telefono', 'edad', 'email', 'tipo_caso', 'descripcion', 'monto'];
+            let valido = true;
+            let mensajesError = [];
+            
+            campos.forEach(campo => {
+                const elemento = document.getElementById(campo);
+                if (!elemento.value.trim()) {
+                    elemento.classList.add('error');
+                    valido = false;
+                    mensajesError.push(`El campo ${campo.replace('_', ' ')} es obligatorio`);
                 } else {
-                    alert('Error al procesar el pago: ' + (data.message || 'Error desconocido'));
+                    elemento.classList.remove('error');
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error al procesar la solicitud');
+            });
+
+            // Validaciones específicas
+            const edad = document.getElementById('edad').value;
+            if (edad < 18) {
+                valido = false;
+                mensajesError.push('Debe ser mayor de 18 años para solicitar una consulta');
+            }
+
+            if (!valido) {
+                alert('Por favor corrija los siguientes errores:\n' + mensajesError.join('\n'));
+            } else {
+                try {
+                    const response = await fetch('/user', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(Object.fromEntries(new FormData(this)))
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.status === 'success' && data.url && data.token) {
+                        // Create a form to submit to Webpay
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = data.url;
+
+                        const tokenInput = document.createElement('input');
+                        tokenInput.type = 'hidden';
+                        tokenInput.name = 'token_ws';
+                        tokenInput.value = data.token;
+
+                        form.appendChild(tokenInput);
+                        document.body.appendChild(form);
+                        form.submit();
+                    } else {
+                        alert('Error al procesar el pago. Por favor intente nuevamente.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error al procesar la solicitud. Por favor intente nuevamente.');
+                }
             }
         });
     </script>
-    </body>
+</body>
 </html>
