@@ -1,16 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Error en el Pago</title>
+    <title>Error en el Pago - Estudio Jurídico</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Se pitio</h1>
-        <p>yera hermano yera!!!</p>
-        <a href="/" class="button">Volver al inicio</a>
+    <div class="container error-container">
+        <header class="form-header">
+            <h1>Error en el Proceso de Pago</h1>
+            <p class="subtitle">Lo sentimos, ha ocurrido un problema con su transacción</p>
+        </header>
+        <div class="error-content">
+            <p class="error-message">La transacción no pudo ser completada. Esto puede deberse a:</p>
+            <ul class="error-list">
+                <li>Fondos insuficientes en la cuenta</li>
+                <li>Problemas de conexión</li>
+                <li>La transacción fue cancelada</li>
+            </ul>
+            <p class="help-text">Si necesita ayuda, puede contactarnos al correo: consultas@estudiojuridico.cl</p>
+        </div>
+        <div class="action-buttons">
+            <a href="/" class="submit-btn">Intentar Nuevamente</a>
+        </div>
     </div>
 </body>
 </html>
